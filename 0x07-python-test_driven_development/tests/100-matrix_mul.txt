@@ -1,0 +1,189 @@
+# 100-matrix_mul.py
+
+This module defines a divide a matrix multiplication function def matrix_mul(m_a, m_b):.
+
+# USAGE
+========
+
+Valid calls:
+------------
+
+* ```def matrix_mul(m_a, m_b):``` multiplies 2 matrices and
+      returns a new matrix with the result of the dot product
+      i.e ```m_a • m_b```; otherwise return error
+
+::
+
+    >>> matrix_mul = __import__('100-matrix_mul').matrix_mul
+
+    >> print(matrix_mul([[1, 2], [3, 4]], [[1, 2], [3, 4]]))
+    [[7, 10], [15, 22]]
+    >>> print(matrix_mul([[1, 2]], [[3, 4], [5, 6]]))
+    [[13, 16]]
+
+
+* if matrices are passed as variables, the original matrices are left unchaged
+::
+
+    >>> mat_A = [[1, 0, 1], [2, 1, 1,], [0, 1, 1,], [1, 1, 2]]
+    >>> mat_B = [[1, 2, 1], [2, 3, 1], [4, 2, 2]]
+    >>> print(matrix_mul(mat_A, mat_B))
+    [[5, 4, 3], [8, 9, 5], [6, 5, 3], [11, 9, 6]]
+    >>> print(mat_A)
+    [[1, 0, 1], [2, 1, 1], [0, 1, 1], [1, 1, 2]]
+    >>> print(mat_B)
+    [[1, 2, 1], [2, 3, 1], [4, 2, 2]]
+
+
+* The function can also handle floating-point numbers.
+::
+
+    >>> mat_A = [[1.0, 2.5], [3.5, 4.0]]
+    >>> mat_B = [[5.0, 6.0], [7.5, 8.5]]
+    >>> print(matrix_mul(mat_A, mat_B))
+    [[23.75, 27.25], [47.5, 55.0]]
+
+
+* Integers and floats can be combined.
+::
+
+    >>> mat_A = [[1, 2.5], [3.5, 4]]
+    >>> mat_B = [[5, 6], [7.5, 8]]
+    >>> print(matrix_mul(mat_A, mat_B))
+    [[23.75, 26.0], [47.5, 53.0]]
+
+
+Invalid calls:
+--------------
+
+* `m_a` and `m_b` must be validated with these requirements in this order
+
+* `m_a` and `m_b` must be an list of lists of integers or floats
+   - if `m_a` or `m_b` is not a list, a TypeError exception is raised
+::
+
+    >>> print(matrix_mul(123, [[1, 2], [3, 4]]))
+    Traceback (most recent call last):
+    TypeError: m_a must be a list
+    >>> print(matrix_mul([[1, 2], [3, 4]], "string"))
+    Traceback (most recent call last):
+    TypeError: m_b must be a list
+
+
+* if both arguments are not lists, only `m_a` is reported
+::
+
+    >>> print(matrix_mul("Matrix m_b", "Matrix m_a"))
+    Traceback (most recent call last):
+    TypeError: m_a must be a list
+
+
+* Not just any list - they *must* be lists of lists!
+  if `m_a` or `m_b` is not a list of lists, a TypeError exception is raised
+::
+
+    >>> print(matrix_mul([1, 2, 3], [[1, 2], [3, 4]]))
+    Traceback (most recent call last):
+    TypeError: m_a must be a list of lists
+    >>> print(matrix_mul([[1, 2], [3, 4]], [123]))
+    Traceback (most recent call last):
+    TypeError: m_b must be a list of lists
+
+
+* an empty list of lists will succeed.
+::
+    >>> print(matrix_mul([[1, 2], [3, 4]], [[], []]))
+    [[], []]
+
+
+* if both arguments are not list of lists, only `m_a` is reported
+::
+
+    >>> print(matrix_mul([56], [32]))
+    Traceback (most recent call last):
+    TypeError: m_a must be a list of lists
+
+* if `m_a` or `m_b` is empty (it means: = [] or = [[]]), a ValueError exception is raised
+::
+
+    >>> print(matrix_mul([], [[1, 2], [3, 4]]))
+    Traceback (most recent call last):
+    ValueError: m_a can't be empty
+    >>> print(matrix_mul([[1, 2], [3, 4]], [[]]))
+    Traceback (most recent call last):
+    ValueError: m_b can't be empty
+
+
+* if both arguments are empty, only `m_a` is reported
+::
+
+    >>> print(matrix_mul([], []))
+    Traceback (most recent call last):
+    ValueError: m_a can't be empty
+
+
+* And not just any list of lists - they *must* be lists of lists containing integers or floats!
+  if one element of those list of lists is not an integer or a float, a TypeError exception is raised
+::
+
+    >>> print(matrix_mul([[1, 2], [3, "string"]], [[5, 6], [7, 8]]))
+    Traceback (most recent call last):
+    TypeError: m_a should contain only integers or floats
+    >>> print(matrix_mul([[1, 2], [3, 4]], [[5, 6], [7, None]]))
+    Traceback (most recent call last):
+    TypeError: m_b should contain only integers or floats
+
+
+* if the list of both arguments contain one or more elements that
+  is not an integer or a float, only that of `m_a` is reported
+::
+
+    >>> print(matrix_mul([[1, 2], [3, "string"]], [[5, 6], [7, "8"]]))
+    Traceback (most recent call last):
+    TypeError: m_a should contain only integers or floats
+
+
+* Finally, the length of all rows in matrices ``m_a`` and ``m_b`` should be equivalent.
+  Otherwise, a TypeError is raised. i.e `m_a` and `m_b` must be a rectangle
+::
+
+    >>> m_a = [
+    ... [1, 2],
+    ... [3, 4, 5]
+    ... ]
+    >>> m_b = m_a
+    >>> print(matrix_mul(m_a, m_b))
+    Traceback (most recent call last):
+    TypeError: each row of m_a must be of the same size
+    >>> print(matrix_mul([[1, 23], [4, 5, 6]], [[1, 2], [3, 4]]))
+    Traceback (most recent call last):
+    TypeError: each row of m_a must be of the same size
+    >>> print(matrix_mul([[1, 2, 3], [4, 5, 6]], [[1, 2], [3, 2, 4]]))
+    Traceback (most recent call last):
+    TypeError: each row of m_b must be of the same size
+
+* if both arguments are not rectangle, only `m_a` is reported
+::
+
+    >>> print(matrix_mul([[1, 23], [4, 5, 6]], [[1, 2], [3, 2, 4]]))
+    Traceback (most recent call last):
+    TypeError: each row of m_a must be of the same size
+
+
+* if `m_a` and `m_b` can’t be multiplied, a ValueError exception is raised
+::
+
+    >>> print(matrix_mul([[1, 2, 3], [4, 5, 6]], [[1, 2], [3, 4]]))
+    Traceback (most recent call last):
+    ValueError: m_a and m_b can't be multiplied
+    >>> print(matrix_mul([[1, 2], [3, 4]], [[5, 6], [7, 8], [9, 10]]))
+    Traceback (most recent call last):
+    ValueError: m_a and m_b can't be multiplied
+
+
+* A minimum of two arguments must be provided. Otherwise, a TypeError is raised.
+::
+
+    >>> print(matrix_mul()) # doctest:
+    Traceback (most recent call last):
+    TypeError: matrix_mul() missing 2 required positional arguments: 'm_a' and 'm_b'
